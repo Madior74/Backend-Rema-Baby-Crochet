@@ -1,0 +1,36 @@
+# Build artifacts
+target/
+**/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# IDE / editor
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.project
+.classpath
+.factorypath
+.springBeans
+.sts4-cache/
+
+# Git
+.git/
+.gitignore
+
+# Local secrets / env
+.env
+*.local
+application.yml
+application-local.properties
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Docs (not needed in the image)
+docs/
+*.md
+HELP.md

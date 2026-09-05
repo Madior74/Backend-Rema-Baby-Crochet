@@ -1,0 +1,37 @@
+# Render Blueprint — Infrastructure as Code for rema-baby-crochet
+# Deploy: push this file to the repo, then "New +" > "Blueprint" on Render.
+services:
+  - type: web
+    name: rema-baby-crochet
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    region: frankfurt
+    plan: free
+    branch: main
+    autoDeploy: true
+    # Render runs `docker build` then starts the container; no startCommand needed
+    # because the Dockerfile ENTRYPOINT launches the jar.
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      # Render injects the database in libpq format; RenderDatabaseConfig turns it
+      # into JDBC properties automatically. No secret is hard-coded here.
+      - key: DATABASE_URL
+        fromDatabase:
+          name: rema-db
+          property: connectionString
+      # Trusted front-end origin(s) for CORS. Change to your production domain.
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://www.rema-baby-crochet.com
+      # Respect the container memory limit instead of the host's RAM.
+      - key: JAVA_OPTS
+        value: "-XX:MaxRAMPercentage=75.0 -XX:+UseG1GC -XX:+ExitOnOutOfMemoryError"
+
+databases:
+  - name: rema-db
+    plan: free
+    databaseName: rema_baby_crochet
+    postgresMajorVersion: 16
+    # Empty allow-list = only reachable from attached Render services (private network).
+    ipAllowList: []
