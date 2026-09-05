@@ -27,11 +27,3 @@ services:
       # Respect the container memory limit instead of the host's RAM.
       - key: JAVA_OPTS
         value: "-XX:MaxRAMPercentage=75.0 -XX:+UseG1GC -XX:+ExitOnOutOfMemoryError"
-
-databases:
-  - name: rema-db
-    plan: free
-    databaseName: rema_baby_crochet
-    postgresMajorVersion: 16
-    # Empty allow-list = only reachable from attached Render services (private network).
-    ipAllowList: []

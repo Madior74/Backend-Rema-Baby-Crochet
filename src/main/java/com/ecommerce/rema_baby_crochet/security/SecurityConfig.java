@@ -37,16 +37,17 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final JwtUtils jw = new JwtUtils();
     private final ObjectMapper objectMapper;
     private final boolean h2ConsoleEnabled;
+    private final String allowedOrigins;
 
     public SecurityConfig(
             ObjectMapper objectMapper,
-            @Value("${app.cors.allowed-origins:http://localhost:4200}") String allowedOrigins,
+            @Value("${app.cors.allowed-origins}") String allowedOrigins,
             @Value("${app.security.h2-console-enabled:false}") boolean h2ConsoleEnabled) {
         this.objectMapper = objectMapper;
         this.h2ConsoleEnabled = h2ConsoleEnabled;
+        this.allowedOrigins = allowedOrigins;
     }
 
     @Bean
@@ -128,7 +129,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+        configuration.setAllowedOrigins(List.of(allowedOrigins));
 
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
 
